@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true, // 允许编译器编译JS，JSX文件
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "vite.config.*"
+  ]
+}

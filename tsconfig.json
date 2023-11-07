@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./", // 解析非相对模块的基地址，默认是当前目录
+    "target": "esnext", // 目标语言的版本
+    "useDefineForClassFields": true,
+    "isolatedModules": false,
+    "strict": false,
+    "module": "esnext",
+    "sourceMap": true, // 生成目标文件的sourceMap文件
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true, // 允许export=导出，由import from 导入
+    "allowJs": true, // 允许编译器编译JS，JSX文件
+    "lib": [
+      "esnext",
+      "dom"
+    ], // TS需要引用的库，即声明文件，es5 默认引用dom、es5、scripthost,如需要使用es的高级版本特性，通常都需要配置，如es8的数组新特性需要引入"ES2019.Array",
+    "paths": { // 路径映射，相对于baseUrl
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "skipLibCheck": true, //跳过typescript对第三方依赖的类型检查
+  },
+  // 指定一个匹配列表（属于自动指定该路径下的所有ts相关文件）
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/*.d.ts",
+  ],
+  // 指定一个排除列表（include的反向操作）
+  "exclude": [
+    "node_modules",
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "vueCompilerOptions": {
+    "target": 3
+  },
+  "moduleResolution": "node",
+}
