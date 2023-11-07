@@ -25,6 +25,5 @@ dist-ssr
 .eslintrc-auto-import.json
 pnpm-lock.yaml
 src/components.d.ts
-src/auto-imports.d.ts
+src/auto-import.d.ts
 pnpm-lock.yaml
-src/auto-imports.d.ts
