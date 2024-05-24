@@ -2,8 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 //使用自定义指令
-import setupDirective from '@/directive';
-setupDirective(app);
+import directive from '@/directive';
+app.use(directive);
 //全局注册elementIcon
 import * as ElIcons from '@element-plus/icons-vue';
 for (const name in ElIcons) {
