@@ -1,26 +1,15 @@
-import loadmore from './loadmore'; //绑定的当前元素滚动到底部事件   通用于加载更多数据
-import drag from './drag'; //拖拽元素  绑定的当前元素可拖拽（兼容pc、移动） 接收参数function   回调显示按下(start)/抬起(end)
-import copy from './copy'; //复制文本   接收需要复制的文本
-import longpress from './longpress'; //长按事件默认2秒   接收function  长按2秒后执行的事件
-import resize from './resize'; //被绑定的元素 windth、height 改变  接收function 改变时触发  原理是setInterval监听  尽量少用
-import debounce from './debounce'; //防抖
-import throttle from './throttle'; //节流
-
-import test from './test';
-
-let obj = {
-    loadmore,
-    drag,
-    copy,
-    longpress,
-    resize,
-    debounce,
-    throttle,
-    test
-};
-
+const modules = import.meta.glob('./group/*.ts', { eager: true }) as any;
 export default function setupDirective(app) {
-    Object.keys(obj).forEach((key) => {
-        app.directive(key, obj[key]);
+    console.log('modules', modules);
+    Object.entries(modules).forEach(([fileName, mod]: [string, any]) => {
+        // 驼峰命名
+        // console.log('fileName', fileName);
+        // console.log('mod', mod);
+        const moduleName = fileName
+            ?.split('/')
+            ?.pop()
+            ?.replace(/\.\w+$/, '');
+        // console.log('moduleName', moduleName);
+        app.directive(moduleName, mod.default);
     });
 }

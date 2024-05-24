@@ -35,7 +35,7 @@ function logout() {
         draggable: true
     })
         .then(() => {
-            router.push({ name: 'login' });
+            router.push({ name: 'Login' });
             sessionStorage.clear();
         })
         .catch(() => {

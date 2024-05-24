@@ -84,7 +84,6 @@ export function get(url: string, params: requestParams = {}) {
                 params: params
             })
             .then((res) => {
-                closeLoading();
                 resolve(res);
                 // if (res.data.code == 200) {
                 //     resolve(res.data);
@@ -101,8 +100,10 @@ export function get(url: string, params: requestParams = {}) {
                 // }
             })
             .catch((err) => {
-                closeLoading();
                 reject(err.data);
+            })
+            .finally(() => {
+                closeLoading();
             });
     });
 }
@@ -116,7 +117,6 @@ export function post(url: string, params: requestParams = {}) {
             // .post(url, QS.stringify(params))//FROM 需要序列化params
             .post(url, params)
             .then((res) => {
-                closeLoading();
                 if (res.data.code == 200) {
                     resolve(res.data);
                 } else if (res.data.code == 40001) {
@@ -132,9 +132,11 @@ export function post(url: string, params: requestParams = {}) {
                 }
             })
             .catch((err) => {
-                closeLoading();
                 ElMessage.error('出现错误，请联系管理员!');
                 reject(err.data);
+            })
+            .finally(() => {
+                closeLoading();
             });
     });
 }
@@ -151,7 +153,6 @@ export function multiPost(url, FormData) {
                 }
             })
             .then((res) => {
-                closeLoading();
                 if (res.data.code == 200) {
                     resolve(res.data);
                 } else if (res.data.code == 40001) {
@@ -167,9 +168,11 @@ export function multiPost(url, FormData) {
                 }
             })
             .catch((err) => {
-                closeLoading();
                 ElMessage.error('出现错误，请联系管理员!');
                 reject(err.data);
+            })
+            .finally(() => {
+                closeLoading();
             });
     });
 }
