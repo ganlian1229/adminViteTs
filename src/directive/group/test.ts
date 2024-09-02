@@ -6,7 +6,7 @@ let test = {
         console.log('parentNode', el.parentNode);
     },
     // 指令绑定元素挂载后
-    mounted(el, binding,vnode) {
+    mounted(el, binding, vnode) {
         console.log('mounted：el', el);
         console.log('mounted：binding', binding);
         console.log('mounted：vnode', vnode);

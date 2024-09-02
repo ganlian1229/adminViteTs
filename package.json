@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "eslint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
+        "eslint": "npx eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
         "format": "npx prettier --write --ignore-path .prettierignore \"**/*.{js,ts,vue,json,scss}\"",
         "preview": "vite preview"
     },

@@ -11,34 +11,22 @@
                 text-color="#555e86"
                 active-text-color="#fff"
             >
-                <template v-for="item in menus" :index="item.path">
-                    <el-sub-menu
-                        :index="item.path"
-                        :key="item.path"
-                        v-if="item.meta.show && !item.meta.isOne"
-                    >
+                <template v-for="item in menus">
+                    <el-sub-menu :index="item.path" :key="item.path" v-if="item.meta.show && !item.meta.isOne">
                         <template #title>
                             <el-icon>
                                 <component :is="item.meta.icon"></component>
                             </el-icon>
                             <span>{{ item.meta.title }}</span>
                         </template>
-                        <el-menu-item
-                            v-for="(list, ind) in item.children"
-                            :key="ind"
-                            :index="item.path + '/' + list.path"
-                        >
+                        <el-menu-item v-for="(list, ind) in item.children" :key="ind" :index="item.path + '/' + list.path">
                             <el-icon>
                                 <component :is="list.meta.icon"></component>
                             </el-icon>
                             <template #title> {{ list.meta.title }}</template>
                         </el-menu-item>
                     </el-sub-menu>
-                    <el-menu-item
-                        :index="item.path + '/' + item.children[0].path"
-                        :key="item.name"
-                        v-else
-                    >
+                    <el-menu-item :index="item.path + '/' + item.children[0].path" :key="item.name" v-else>
                         <el-icon>
                             <component :is="item.meta.icon"></component>
                         </el-icon>

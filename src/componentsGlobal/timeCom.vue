@@ -11,7 +11,7 @@ let yearTime = ref('');
 let weekTime = ref('');
 let time = ref('');
 let interval = null;
-let farmTime = ref('');
+let farmTime = ref<any>('');
 onBeforeMount(() => {
     startTime();
     interval = setInterval(() => {
@@ -269,18 +269,7 @@ const calendar = {
      * @Array Of Property trans["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"]
      * @return Cn string
      */
-    Gan: [
-        '\u7532',
-        '\u4e59',
-        '\u4e19',
-        '\u4e01',
-        '\u620a',
-        '\u5df1',
-        '\u5e9a',
-        '\u8f9b',
-        '\u58ec',
-        '\u7678'
-    ],
+    Gan: ['\u7532', '\u4e59', '\u4e19', '\u4e01', '\u620a', '\u5df1', '\u5e9a', '\u8f9b', '\u58ec', '\u7678'],
 
     /**
      * 天干地支之地支速查表
@@ -288,20 +277,7 @@ const calendar = {
      * @trans["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"]
      * @return Cn string
      */
-    Zhi: [
-        '\u5b50',
-        '\u4e11',
-        '\u5bc5',
-        '\u536f',
-        '\u8fb0',
-        '\u5df3',
-        '\u5348',
-        '\u672a',
-        '\u7533',
-        '\u9149',
-        '\u620c',
-        '\u4ea5'
-    ],
+    Zhi: ['\u5b50', '\u4e11', '\u5bc5', '\u536f', '\u8fb0', '\u5df3', '\u5348', '\u672a', '\u7533', '\u9149', '\u620c', '\u4ea5'],
 
     /**
      * 天干地支之地支速查表<=>生肖
@@ -309,20 +285,7 @@ const calendar = {
      * @trans["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"]
      * @return Cn string
      */
-    Animals: [
-        '\u9f20',
-        '\u725b',
-        '\u864e',
-        '\u5154',
-        '\u9f99',
-        '\u86c7',
-        '\u9a6c',
-        '\u7f8a',
-        '\u7334',
-        '\u9e21',
-        '\u72d7',
-        '\u732a'
-    ],
+    Animals: ['\u9f20', '\u725b', '\u864e', '\u5154', '\u9f99', '\u86c7', '\u9a6c', '\u7f8a', '\u7334', '\u9e21', '\u72d7', '\u732a'],
 
     /**
      * 阳历节日
@@ -644,19 +607,7 @@ const calendar = {
      * @trans ['日','一','二','三','四','五','六','七','八','九','十']
      * @return Cn string
      */
-    nStr1: [
-        '\u65e5',
-        '\u4e00',
-        '\u4e8c',
-        '\u4e09',
-        '\u56db',
-        '\u4e94',
-        '\u516d',
-        '\u4e03',
-        '\u516b',
-        '\u4e5d',
-        '\u5341'
-    ],
+    nStr1: ['\u65e5', '\u4e00', '\u4e8c', '\u4e09', '\u56db', '\u4e94', '\u516d', '\u4e03', '\u516b', '\u4e5d', '\u5341'],
 
     /**
      * 日期转农历称呼速查表
@@ -672,20 +623,7 @@ const calendar = {
      * @trans ['正','一','二','三','四','五','六','七','八','九','十','冬','腊']
      * @return Cn string
      */
-    nStr3: [
-        '\u6b63',
-        '\u4e8c',
-        '\u4e09',
-        '\u56db',
-        '\u4e94',
-        '\u516d',
-        '\u4e03',
-        '\u516b',
-        '\u4e5d',
-        '\u5341',
-        '\u51ac',
-        '\u814a'
-    ],
+    nStr3: ['\u6b63', '\u4e8c', '\u4e09', '\u56db', '\u4e94', '\u516d', '\u4e03', '\u516b', '\u4e5d', '\u5341', '\u51ac', '\u814a'],
 
     /**
      * 返回农历y年一整年的总天数
@@ -903,10 +841,7 @@ const calendar = {
         y = objDate.getFullYear();
         m = objDate.getMonth() + 1;
         d = objDate.getDate();
-        let offset =
-            (Date.UTC(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()) -
-                Date.UTC(1900, 0, 31)) /
-            86400000;
+        let offset = (Date.UTC(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()) - Date.UTC(1900, 0, 31)) / 86400000;
         for (i = 1900; i < 2101 && offset > 0; i++) {
             temp = this.lYearDays(i);
             offset -= temp;
@@ -919,11 +854,7 @@ const calendar = {
         //是否今天
         let isTodayObj = new Date(),
             isToday = false;
-        if (
-            isTodayObj.getFullYear() === y &&
-            isTodayObj.getMonth() + 1 === m &&
-            isTodayObj.getDate() === d
-        ) {
+        if (isTodayObj.getFullYear() === y && isTodayObj.getMonth() + 1 === m && isTodayObj.getDate() === d) {
             isToday = true;
         }
         //星期几

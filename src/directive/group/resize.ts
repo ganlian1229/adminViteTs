@@ -22,6 +22,7 @@ let resize = {
             // 浏览器不支持 MutationObserver
             let width = '',
                 height = '';
+            // eslint-disable-next-line no-inner-declarations
             function isResize() {
                 let style = document.defaultView.getComputedStyle(el);
                 if (width !== style.width || height !== style.height) {

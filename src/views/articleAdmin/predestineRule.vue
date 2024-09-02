@@ -39,10 +39,7 @@ function scrollFun() {
     let elementClientHeight = document.documentElement.clientHeight;
     // console.log(elementClientHeight);
     // console.log(scrollTop + bodyClientHeight);
-    if (
-        !isLoading.value &&
-        scrollBoxHeight.value + scrollBoxOffsetTop.value - 50 <= scrollTop + elementClientHeight
-    ) {
+    if (!isLoading.value && scrollBoxHeight.value + scrollBoxOffsetTop.value - 50 <= scrollTop + elementClientHeight) {
         isLoading.value = true;
         //需要加载数据了
         console.log('11111');

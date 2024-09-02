@@ -1,6 +1,3 @@
-/* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution');
-
 module.exports = {
     root: true, // 禁用持续查找（root）
     env: {
@@ -18,14 +15,10 @@ module.exports = {
         sourceType: 'module' // 指定源代码存在的位置，script | module，默认为script
     },
     // eslint:recommended:表示引入eslint的核心功能，并且报告一些常见的共同错误。
-    extends: [
-        'plugin:vue/essential',
-        'eslint:recommended',
-        '@vue/prettier',
-        './.eslintrc-auto-import.json',
-        'plugin:prettier/recommended'
-    ],
+    extends: ['plugin:vue/essential', 'eslint:recommended', '@vue/prettier', './.eslintrc-auto-import.json', 'plugin:prettier/recommended'],
     rules: {
+        'no-inner-declarations': 'off', // 缩进规则检测关闭
+        'vue/multi-word-component-names': 'off', // 组件名称可以为单个单词
         'vue/no-v-model-argument': 'off', // 在vue3中使用v-model报错
         'array-bracket-spacing': 'off', // 是否允许非空数组里面有多余的空格
         'object-curly-spacing': 'off', // 大括号内是否允许不必要的空格

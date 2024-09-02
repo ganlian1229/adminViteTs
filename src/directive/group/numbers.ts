@@ -6,7 +6,7 @@ let numbers = {
         console.log('parentNode', el.parentNode);
     },
     // 指令绑定元素挂载后
-    mounted(el, binding,vNode) {
+    mounted(el, binding, vNode) {
         let input = el;
         if (input.tagName !== 'INPUT') {
             input = input.querySelector('input');
