@@ -17,6 +17,14 @@
                 </el-date-picker>
             </div>
         </div>
+        <div class="body-box">
+            <div class="box">
+                <div class="box-item" v-for="(item, index) in boxList" :key="index">
+                    <div class="label">{{ item.label }}</div>
+                    <div class="value">{{ item.value }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -51,6 +59,21 @@ let shortcuts = [
     }
 ];
 
+let boxList = ref([
+    {
+        label: '阿里上课的',
+        value: '阿是两节课打开了'
+    },
+    {
+        label: '阿里上课的',
+        value: '阿是两节课打开了'
+    },
+    {
+        label: '阿里上课的',
+        value: '阿是两节课打开了'
+    }
+]);
+
 onMounted(() => {
     console.log('mounted');
 });
@@ -71,5 +94,23 @@ function getDataList() {
 </script>
 <style lang="scss">
 .advertising {
+    .box {
+        width: 500px;
+        border: 1px solid #000;
+
+        .box-item {
+            padding: 10px 20px;
+            display: flex;
+            .label {
+                width: 150px;
+                flex: none;
+            }
+            .value {
+                flex: auto;
+                word-wrap: break-word;
+                word-break: break-all;
+            }
+        }
+    }
 }
 </style>
