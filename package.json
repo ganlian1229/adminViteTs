@@ -7,7 +7,7 @@
         "dev": "vite",
         "build": "vite build",
         "eslint": "npx eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
-        "format": "npx prettier --write --ignore-path .prettierignore \"**/*.{js,ts,vue,json,scss}\"",
+        "format": "npx prettier --write --ignore-path .prettierignore \"**/*.{js,ts,vue,scss}\"",
         "preview": "vite preview"
     },
     "husky": {
@@ -16,7 +16,7 @@
         }
     },
     "lint-staged": {
-        "*.{js,ts,vue,json,scss}": [
+        "*.{js,ts,vue,scss}": [
             "npx prettier --write --ignore-path .prettierignore"
         ]
     },
