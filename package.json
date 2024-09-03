@@ -17,6 +17,7 @@
     },
     "lint-staged": {
         "*.{js,ts,vue,scss}": [
+            "npx eslint --fix",
             "npx prettier --write --ignore-path .prettierignore"
         ]
     },
