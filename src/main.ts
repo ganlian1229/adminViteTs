@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
+app.config.idPrefix = 'admin';
 //使用自定义指令
 import directive from '@/directive';
 app.use(directive);

@@ -25,10 +25,21 @@
     </div>
 </template>
 <script setup lang="ts">
+import { useId } from 'vue';
 import storeObj from '@/store';
 defineOptions({
     name: 'mainVue'
 });
+
+let idObj = {
+    id: useId(),
+    id1: useId(),
+    id2: useId(),
+    id3: useId(),
+    id4: useId()
+};
+
+console.log('idObj', idObj);
 
 let { userInfo } = storeToRefs(storeObj.mainStore);
 
