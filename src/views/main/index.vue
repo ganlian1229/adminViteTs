@@ -21,12 +21,13 @@
                 <el-button v-debounce="debounceFun">防抖</el-button>
                 <el-button v-throttle="throttleFun">节流</el-button>
             </div>
+            <div>{{ globalFun.globalFilterLabel('11', [{ label: '水电费', value: '11' }]) }}</div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import { useId } from 'vue';
 import storeObj from '@/store';
+import globalFun from '@/utils/globalFun';
 defineOptions({
     name: 'mainVue'
 });
@@ -45,10 +46,10 @@ let { userInfo } = storeToRefs(storeObj.mainStore);
 
 let number = ref('');
 let dataList = ref([]);
-let spanDom = ref(null);
+let globalComDom = useTemplateRef('spanDom');
 onActivated(() => {
     getDataList();
-    console.log('spanDom', spanDom.value.spanDom);
+    console.log('globalComDom', globalComDom.value);
 });
 
 function longPressFun() {

@@ -5,11 +5,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { useTemplateRef } from 'vue';
 let spanDom = useTemplateRef('spanDom');
 
 const { msg = '默认参数' } = defineProps<{
-    msg: string;
+    msg?: string;
 }>();
 
 defineExpose({

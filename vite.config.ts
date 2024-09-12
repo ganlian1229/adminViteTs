@@ -25,7 +25,14 @@ export default defineConfig(({ command }) => {
             vue(),
             AutoImport({
                 resolvers: [ElementPlusResolver()],
-                imports: ['vue', 'pinia', 'vue-router'],
+                imports: [
+                    'vue',
+                    {
+                        vue: ['useTemplateRef', 'useId', 'onWatcherCleanup']
+                    },
+                    'pinia',
+                    'vue-router'
+                ],
                 // 可以选择auto-import.d.ts生成的位置，使用ts建议设置为'src/auto-import.d.ts'
                 dts: 'src/auto-import.d.ts',
                 // eslint globals Docs - https://eslint.org/docs/user-guide/configuring/language-options#specifying-globals
