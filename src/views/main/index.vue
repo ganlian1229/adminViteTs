@@ -15,7 +15,7 @@
             <el-button v-longpress="{ time: 4000, callBack: longPressFun }">长按4秒</el-button>
         </div>
         <div class="right">
-            <globalCom class="test-span" ref="spanDom"></globalCom>
+            <globalCom v-model:obj="globalComObj" class="test-span" ref="spanDom"></globalCom>
             <testGlobalCom></testGlobalCom>
             <div>
                 <el-button v-debounce="debounceFun">防抖</el-button>
@@ -39,6 +39,19 @@ let idObj = {
     id3: useId(),
     id4: useId()
 };
+let globalComObj = ref({
+    age: 18
+});
+
+watch(
+    () => globalComObj,
+    (newVal) => {
+        console.log('globalComObj', globalComObj.value);
+    },
+    {
+        deep: true
+    }
+);
 
 console.log('idObj', idObj);
 
