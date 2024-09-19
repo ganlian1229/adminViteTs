@@ -11,9 +11,9 @@
         </div>
         <ul>
             <li v-for="(item, index) in dataList" :key="index">
-                <span>{{ item.elName }}:</span>
+                <span>{{ item.elName.name }}:</span>
                 <component :is="item.elName" v-model="item.value" :options="item.options" @change="handlerChange(index, $event)">
-                    <template v-if="item.elName === 'el-select'">
+                    <template v-if="item.elName.name === 'ElSelect'">
                         <el-option v-for="(option, optionIndex) in item.options" :key="optionIndex" :label="option.label" :value="option.value" />
                     </template>
                 </component>
@@ -21,17 +21,8 @@
         </ul>
     </div>
 </template>
-<script lang="ts">
-import { ElInput, ElSelect, ElOption } from 'element-plus';
-export default {
-    components: {
-        ElInput,
-        ElSelect,
-        ElOption
-    }
-};
-</script>
 <script setup lang="ts">
+import { ElInput, ElSelect, ElOption } from 'element-plus';
 import testComA from './testComA.vue';
 import testComB from './testComB.vue';
 import testComC from './testComC.vue';
@@ -57,12 +48,12 @@ function change(index) {
 
 const dataList = ref([
     {
-        elName: 'el-input',
+        elName: markRaw(ElInput),
         value: '123456',
         options: {}
     },
     {
-        elName: 'el-select',
+        elName: markRaw(ElSelect),
         value: 'A',
         options: [
             {
