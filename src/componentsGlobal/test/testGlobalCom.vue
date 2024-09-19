@@ -1,8 +1,8 @@
 <template>
     <div class="globalCom">
         <p>动态添加的全局组件2</p>
-        <ul>
-            <li v-for="(item, index) in list" :key="index" @click="change(index)">
+        <ul class="tab-list">
+            <li class="tab-item" :class="actIndex === index ? 'act' : ''" v-for="(item, index) in list" :key="index" @click="change(index)">
                 {{ item.name }}
             </li>
         </ul>
@@ -23,34 +23,31 @@
 </template>
 <script lang="ts">
 import { ElInput, ElSelect, ElOption } from 'element-plus';
-import testComA from './testComA.vue';
-import testComB from './testComB.vue';
-import testComC from './testComC.vue';
 export default {
     components: {
         ElInput,
         ElSelect,
-        ElOption,
-        testComA,
-        testComB,
-        testComC
+        ElOption
     }
 };
 </script>
 <script setup lang="ts">
+import testComA from './testComA.vue';
+import testComB from './testComB.vue';
+import testComC from './testComC.vue';
 let actIndex = ref(0);
 const list = ref([
     {
         name: 'A',
-        comments: 'testComA'
+        comments: markRaw(testComA)
     },
     {
         name: 'B',
-        comments: 'testComB'
+        comments: markRaw(testComB)
     },
     {
         name: 'C',
-        comments: 'testComC'
+        comments: markRaw(testComC)
     }
 ]);
 
@@ -84,4 +81,17 @@ function handlerChange(index, event) {
     console.log('event', event);
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.tab-list {
+    display: flex;
+    .tab-item {
+        padding: 0 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        border: 1px solid #000;
+        &.act {
+            color: red;
+        }
+    }
+}
+</style>
