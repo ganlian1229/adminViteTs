@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, { AxiosRequestConfig, AxiosResponse, AxiosError, CancelTokenSource } from 'axios';
 import { ElLoading, ElMessage } from 'element-plus';
 const router = useRouter();
 // 请求头
@@ -47,31 +47,68 @@ function closeLoading() {
         LoadingInstance.target = null;
     }
 }
-// // Axios请求前
-// Axios.interceptors.request.use(
-//     config => {
-//         let token = sessionStorage.getItem("token");
-//         token && (config.headers.Authorization = `Bearer ${token}`);
-//         return config;
-//     },
-//     err => {
-//         Message.error("参数错误");
-//         return Promise.reject(err);
-//     }
-// );
-// //Axios请求返回
-// Axios.interceptors.response.use(
-//     response => {
-//         return Promise.resolve(response);
-//     },
-//     err => {
-//         return Promise.reject(err);
-//     }
-// )
 
+// 存储待处理的请求队列
+const requestQueue: AxiosRequestConfig[] = [];
+// 并发请求计数器
+let activeRequests = 0;
+// 最大并发数
+const MAXREQUEST = 3;
+// 处理并发请求
+function handlerActiveRequests() {
+    activeRequests--;
+    if (requestQueue.length > 0) {
+        const queuedRequest = requestQueue.shift();
+        if (queuedRequest) {
+            activeRequests++;
+            service(queuedRequest);
+        }
+    }
+}
+
+// Axios请求前
+Axios.interceptors.request.use(
+    (config: any) => {
+        // if (activeRequests >= MAXREQUEST) {
+        //     // 否则，将请求添加到队列中等待执行
+        //     requestQueue.push(config);
+        //     return new Promise<AxiosRequestConfig>((resolve) => {
+        //         setTimeout(() => {
+        //             const queuedRequest = requestQueue.shift();
+        //             if (queuedRequest) {
+        //                 activeRequests++;
+        //                 resolve(queuedRequest);
+        //             }
+        //         }, 0);
+        //     });
+        // } else {
+        //     // 如果当前正在执行的请求数量小于最大并发数，则立即执行
+        //     activeRequests++;
+        // let token = sessionStorage.getItem('token');
+        // token && (config.headers.Authorization = `Bearer ${token}`);
+        return config;
+        // }
+    },
+    (err: AxiosError) => {
+        ElMessage.error('参数错误');
+        return Promise.reject(err);
+    }
+);
+//Axios响应拦截器
+Axios.interceptors.response.use(
+    (response: AxiosResponse) => {
+        // handlerActiveRequests();
+        return response;
+    },
+    (err: AxiosError) => {
+        console.log('err', err);
+        // handlerActiveRequests();
+        return Promise.reject(err);
+    }
+);
 interface requestParams {
     hideLoading?: boolean;
-    [x: string]: any;
+    [key: string]: any;
 }
 
 //get请求方法
@@ -100,6 +137,7 @@ export function get(url: string, params: requestParams = {}) {
                 // }
             })
             .catch((err) => {
+                console.log('err', err);
                 reject(err.data);
             })
             .finally(() => {

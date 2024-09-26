@@ -22,10 +22,14 @@
                 <el-button v-throttle="throttleFun">节流</el-button>
             </div>
             <div>{{ globalFun.globalFilterLabel('11', [{ label: '水电费', value: '11' }]) }}</div>
+            <div>
+                <el-button @click="testRequest()">测试请求数</el-button>
+            </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
+import { get } from '@/api/request';
 import storeObj from '@/store';
 import globalFun from '@/utils/globalFun';
 defineOptions({
@@ -42,6 +46,15 @@ let idObj = {
 let globalComObj = ref({
     age: 18
 });
+
+function testRequest() {
+    let maxNumber = 10;
+    for (let i = 0; i < maxNumber; i++) {
+        get(`http://127.0.0.1:3000/api/test`, { index: maxNumber - i }).then(() => {
+            console.log(`请求完成${maxNumber - i}`);
+        });
+    }
+}
 
 watch(
     () => globalComObj,
