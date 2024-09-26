@@ -26,4 +26,4 @@ dist-ssr
 pnpm-lock.yaml
 src/components.d.ts
 src/auto-import.d.ts
-pnpm-lock.yaml
+stats.html

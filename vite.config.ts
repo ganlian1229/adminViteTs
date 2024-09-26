@@ -4,7 +4,8 @@ import vue from '@vitejs/plugin-vue';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-
+import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import';
+import { visualizer } from 'rollup-plugin-visualizer';
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
     return {
@@ -57,6 +58,13 @@ export default defineConfig(({ command }) => {
                 // 允许子目录作为组件的命名空间前缀。
                 directoryAsNamespace: false
                 // include:[]
+            }),
+            createStyleImportPlugin({
+                resolves: [ElementPlusResolve()]
+            }),
+            visualizer({
+                open: false,
+                filename: 'stats.html'
             })
         ],
         resolve: {
@@ -76,7 +84,7 @@ export default defineConfig(({ command }) => {
         build: {
             target: 'esnext', // 浏览器兼容性  "esnext"|"modules"
             outDir: 'dist', // 指定输出路径
-            cssCodeSplit: false, // 禁用 CSS 代码拆分,将整个项目中的所有 CSS 将被提取到一个 CSS 文件中
+            cssCodeSplit: true, // 禁用 CSS 代码拆分,将整个项目中的所有 CSS 将被提取到一个 CSS 文件中
             sourcemap: false, // 构建后是否生成 source map 文件
             // chunk 大小警告的限制（以 kbs 为单位）
             // chunkSizeWarningLimit: 1024,
