@@ -43,7 +43,7 @@ import { deepCopy } from '@/utils';
 const route = useRoute();
 const router = useRouter();
 const emit = defineEmits(['update:isActive']);
-const props = defineProps({
+const { isActive } = defineProps({
     isActive: {
         type: Boolean
     }

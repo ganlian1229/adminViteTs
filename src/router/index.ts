@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import dynamicRouter from '@/router/dynamicRouter';
-import { addRouter, removeRouter } from '@/utils';
+import { addRouter } from '@/utils';
 import routes from './routes';
 const router = createRouter({
     history: createWebHashHistory(),
@@ -17,7 +17,6 @@ router.beforeEach((to, from, next) => {
     if (to.name == 'login') {
         //当前页面跳转到登录页
         next();
-        removeRouter(dynamicRouter);
         sessionStorage.clear();
     } else {
         if (to.matched.length == 0 && !isRefresh) {

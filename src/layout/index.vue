@@ -1,27 +1,36 @@
 <template>
     <el-container class="container-content">
-        <topNavBar v-model:isActive="isActive"></topNavBar>
+        <topNavBar v-model:isActive="isActive" v-model:isShowTags="isShowTags"></topNavBar>
         <leftSidebar v-model:isActive="isActive"></leftSidebar>
-        <el-container class="main-container" :class="isActive ? 'active' : ''">
-            <div style="width: 100%">
+        <el-container
+            class="main-container"
+            :class="{
+                active: isActive,
+                'show-tags': isShowTags
+            }"
+        >
+            <el-scrollbar wrap-class="scrollbar-main-wrapper">
                 <div class="body-content">
-                    <router-view v-slot="{ Component }">
-                        <keep-alive :include="keepAliveArr">
-                            <component :is="Component"></component>
+                    <router-view v-slot="{ Component, route }">
+                        <keep-alive :include="cachedViews">
+                            <component ref="componentDom" :is="Component" :key="route.fullPath" />
                         </keep-alive>
                     </router-view>
                 </div>
-            </div>
+            </el-scrollbar>
         </el-container>
     </el-container>
 </template>
 <script setup lang="ts">
 import leftSidebar from './components/leftSidebar.vue';
 import topNavBar from './components/topNavBar.vue';
-//需要缓存的路由  值是组件的name
-let keepAliveArr = ref(['mainVue']);
+import storeObj from '@/store';
+
+const { cachedViews } = storeToRefs(storeObj.tagsViewStore);
 //是否收起菜单 true 收起
-let isActive = ref(false);
+const isActive = ref(false);
+// 是否显示标签页
+const isShowTags = ref(true);
 
 onMounted(() => {});
 </script>
@@ -32,17 +41,37 @@ $bgimg: '@/assets/image/';
     .main-container {
         margin-left: 210px;
         position: relative;
-        min-height: 100%;
+        height: 100%;
         transition: margin-left 0.28s;
-        padding-top: 60px;
+        padding-top: 50px;
         min-width: 1200px;
         &.active {
             margin-left: 54px;
         }
+        &.show-tags {
+            padding-top: 80px;
+            :deep(.el-scrollbar) {
+                height: calc(100vh - 80px);
+            }
+            .body-content {
+                min-height: calc(100vh - 80px);
+            }
+        }
+
+        :deep(.el-scrollbar) {
+            width: 100%;
+            height: calc(100vh - 50px);
+            .scrollbar-main-wrapper {
+                & > .el-scrollbar__view {
+                    min-height: 100%;
+                }
+            }
+        }
         .body-content {
+            width: 100%;
+            min-height: calc(100vh - 50px);
             padding: 20px;
             position: relative;
-            min-height: calc(100vh - 60px);
             background: #f2f4f7;
         }
     }

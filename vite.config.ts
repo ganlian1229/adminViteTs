@@ -76,8 +76,10 @@ export default defineConfig(({ command }) => {
         css: {
             preprocessorOptions: {
                 scss: {
+                    api: 'modern-compiler', // 解决sass警告
+                    silenceDeprecations: ['legacy-js-api'], // 解决sass警告
                     charset: false, // 避免出现: build时的 @charset 必须在第一行的警告
-                    additionalData: `@import "@/assets/css/variables.scss";` // 引入全局变量文件
+                    additionalData: `@forward "@/assets/css/variables.scss";` // 引入全局变量文件
                 }
             }
         },

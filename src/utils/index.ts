@@ -1,28 +1,13 @@
 import router from '@/router';
 /**
- * @description: 移出添加的动态路由
- * @param {*} routerArr
- * @return {*}
- */
-export function removeRouter(routerArr) {
-    routerArr.forEach((item) => {
-        if (router.hasRoute(item.name)) {
-            router.removeRoute(item.name);
-        }
-    });
-}
-/**
  * @description: 添加动态路由
  * @param {*} routerArr
  * @return {*}
  */
-export function addRouter(routerArr) {
+export function addRouter(routerArr = []) {
     //添加之前先删除之前添加的路由
-    removeRouter(routerArr);
     routerArr.forEach((item) => {
-        if (!router.hasRoute(item.name)) {
-            router.addRoute(item.name, item);
-        }
+        router.addRoute('Root', item);
     });
 }
 

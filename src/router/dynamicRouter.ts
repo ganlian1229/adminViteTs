@@ -8,11 +8,10 @@ export default [
             title: '首页', //显示在右侧的文字（给自己的标识）
             isOne: true //是否只有一个子集
         },
-        name: 'main',
         children: [
             {
                 path: 'index',
-                name: 'mainIndex',
+                name: 'main',
                 meta: {
                     show: true,
                     title: '首页'
@@ -30,11 +29,10 @@ export default [
             title: '广告位',
             isOne: true
         },
-        name: 'advertising',
         children: [
             {
                 path: 'advertising',
-                name: 'advertisingCon',
+                name: 'advertising',
                 meta: {
                     show: true,
                     title: '广告位'
@@ -52,11 +50,10 @@ export default [
             title: '广告位2',
             isOne: true
         },
-        name: 'advertising2',
         children: [
             {
                 path: 'advertising2',
-                name: 'advertisingCon2',
+                name: 'advertising2',
                 meta: {
                     show: true,
                     title: '广告位2'
@@ -74,11 +71,10 @@ export default [
             title: '广告位3',
             isOne: true
         },
-        name: 'advertising3',
         children: [
             {
                 path: 'advertising3',
-                name: 'advertisingCon3',
+                name: 'advertising3',
                 meta: {
                     show: true,
                     title: '广告位3'
@@ -96,7 +92,6 @@ export default [
             title: '文章管理',
             isOne: false
         },
-        name: 'articleAdmin',
         children: [
             {
                 path: 'predestineRule',

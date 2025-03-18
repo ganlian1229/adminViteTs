@@ -8,5 +8,5 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 </script>
 <style lang="scss">
 // 全局样式
-@import '@/assets/css/index.scss';
+@use '@/assets/css/index.scss' as *;
 </style>

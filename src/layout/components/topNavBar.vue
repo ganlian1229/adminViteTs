@@ -1,30 +1,38 @@
 <template>
     <div class="top-navbar" :class="isActive ? 'act' : ''">
-        <div class="navbar-left">
-            <div class="hamburger-box" @click="switchActFun()">
-                <el-icon :size="23">
-                    <component :is="isActive ? 'expand' : 'fold'" />
-                </el-icon>
+        <div class="top-box">
+            <div class="navbar-left">
+                <div class="hamburger-box" @click="switchActFun()">
+                    <el-icon :size="23">
+                        <component :is="isActive ? 'expand' : 'fold'" />
+                    </el-icon>
+                </div>
+            </div>
+            <div class="navbar-right">
+                <el-button link @click="logout()">退出登录</el-button>
             </div>
         </div>
-        <div class="navbar-right">
-            <el-button link @click="logout()">退出登录</el-button>
+        <div class="tags-view-box" v-if="isShowTags">
+            <tagsView></tagsView>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import { ElMessageBox } from 'element-plus';
+import tagsView from './tagsView.vue';
 const router = useRouter();
 const emits = defineEmits(['update:isActive']);
-const props = defineProps({
+const { isActive, isShowTags } = defineProps({
     isActive: {
+        type: Boolean
+    },
+    isShowTags: {
         type: Boolean
     }
 });
 //切换左侧收起/展开
 function switchActFun() {
-    // console.log(this.value);
-    emits('update:isActive', !props.isActive);
+    emits('update:isActive', !isActive);
 }
 function logout() {
     ElMessageBox.confirm('是否确认退出登录?', '提示', {
@@ -49,19 +57,27 @@ function logout() {
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px;
     background: #fff;
     // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
     border-bottom: 1px solid #eeeeee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 80px;
-    padding-left: 210px;
     z-index: 1002;
     transition: all 0.28s;
     &.act {
-        padding-left: 54px;
+        .top-box,
+        .tags-view-box {
+            padding-left: 54px;
+        }
+    }
+    .top-box {
+        height: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 80px;
+        padding-left: 210px;
+    }
+    .tags-view-box {
+        padding-left: 210px;
     }
     .navbar-left {
         height: 100%;
