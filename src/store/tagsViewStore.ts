@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-
-export default defineStore('tagsView', {
+const tagsViewStore = defineStore('tagsView', {
     state: () => ({
         visitedViews: [],
         cachedViews: []
@@ -48,3 +47,4 @@ export default defineStore('tagsView', {
     //     enabled: true
     // }
 });
+export default tagsViewStore;

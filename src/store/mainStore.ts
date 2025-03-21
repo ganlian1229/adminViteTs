@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-
-export default defineStore({
+const mainStore = defineStore({
     id: 'mainStore',
     state: () => {
         return {
@@ -40,3 +39,4 @@ export default defineStore({
         ]
     }
 });
+export default mainStore;

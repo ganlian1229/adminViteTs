@@ -41,12 +41,12 @@
 </template>
 
 <script setup>
-import { tagsViewStore } from '@/store';
+import storeObj from '@/store';
 const router = useRouter();
 const route = useRoute();
 
-const { visitedViews } = storeToRefs(tagsViewStore);
-const { addView, closeView, closeMultipleView } = tagsViewStore;
+const { visitedViews } = storeToRefs(storeObj.tagsViewStore);
+const { addView, closeView, closeMultipleView } = storeObj.tagsViewStore;
 
 watch(
     () => route,
