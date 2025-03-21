@@ -1,5 +1,7 @@
 import mainStore from './mainStore';
+import tagsViewStore from './tagsViewStore';
 
 export default {
-    mainStore: mainStore()
+    mainStore: mainStore(),
+    tagsViewStore: tagsViewStore()
 };
