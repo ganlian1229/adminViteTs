@@ -12,8 +12,8 @@
             <el-scrollbar wrap-class="scrollbar-main-wrapper">
                 <div class="body-content">
                     <router-view v-slot="{ Component, route }">
-                        <keep-alive :include="cachedViews">
-                            <component ref="componentDom" :is="Component" :key="route.fullPath" />
+                        <keep-alive>
+                            <component :is="Component" :key="route.fullPath" />
                         </keep-alive>
                     </router-view>
                 </div>
@@ -24,9 +24,7 @@
 <script setup lang="ts">
 import leftSidebar from './components/leftSidebar.vue';
 import topNavBar from './components/topNavBar.vue';
-import storeObj from '@/store';
 
-const { cachedViews } = storeToRefs(storeObj.tagsViewStore);
 //是否收起菜单 true 收起
 const isActive = ref(false);
 // 是否显示标签页

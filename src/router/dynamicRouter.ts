@@ -122,6 +122,48 @@ export default [
                     title: '近期优惠'
                 },
                 component: () => import('../views/articleAdmin/recentDiscount.vue')
+            },
+            {
+                path: 'testDetails/:id',
+                name: 'testDetails',
+                meta: {
+                    icon: 'ShoppingCart',
+                    show: false,
+                    title: '测试详情页'
+                },
+                component: () => import('../views/articleAdmin/testDetails.vue')
+            },
+            {
+                path: 'articleUser',
+                name: 'articleUser',
+                meta: {
+                    icon: 'ShoppingCart',
+                    show: true,
+                    title: '文章人员'
+                },
+                component: () => import('../views/common/commonRouterView.vue'),
+                children: [
+                    {
+                        path: 'userList',
+                        name: 'userList',
+                        meta: {
+                            icon: 'ShoppingCart',
+                            show: true,
+                            title: '用户列表'
+                        },
+                        component: () => import('../views/articleAdmin/articleUser/userList.vue')
+                    },
+                    {
+                        path: 'fileList',
+                        name: 'fileList',
+                        meta: {
+                            icon: 'ShoppingCart',
+                            show: true,
+                            title: '文件列表'
+                        },
+                        component: () => import('../views/articleAdmin/articleUser/fileList.vue')
+                    }
+                ]
             }
         ]
     }

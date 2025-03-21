@@ -12,34 +12,22 @@
                 active-text-color="#fff"
             >
                 <template v-for="item in menus">
-                    <el-sub-menu :index="item.path" :key="item.path" v-if="item.meta.show && !item.meta.isOne">
-                        <template #title>
-                            <el-icon>
-                                <component :is="item.meta.icon"></component>
-                            </el-icon>
-                            <span>{{ item.meta.title }}</span>
-                        </template>
-                        <el-menu-item v-for="(list, ind) in item.children" :key="ind" :index="item.path + '/' + list.path">
-                            <el-icon>
-                                <component :is="list.meta.icon"></component>
-                            </el-icon>
-                            <template #title> {{ list.meta.title }}</template>
-                        </el-menu-item>
-                    </el-sub-menu>
-                    <el-menu-item :index="item.path + '/' + item.children[0].path" :key="item.name" v-else>
-                        <el-icon>
-                            <component :is="item.meta.icon"></component>
-                        </el-icon>
-                        <template #title> {{ item.meta.title }}</template>
-                    </el-menu-item>
+                    <template v-if="item.meta.show">
+                        <RecursiveMenuItem :item="item" :parentPath="item.path" :key="item.path" />
+                    </template>
                 </template>
             </el-menu>
         </el-scrollbar>
     </div>
 </template>
+
 <script setup lang="ts">
 import dynamicRouter from '@/router/dynamicRouter';
 import { deepCopy } from '@/utils';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import RecursiveMenuItem from './RecursiveMenuItem.vue';
+
 const route = useRoute();
 const router = useRouter();
 const emit = defineEmits(['update:isActive']);
@@ -48,6 +36,7 @@ const { isActive } = defineProps({
         type: Boolean
     }
 });
+
 //左侧导航列表
 let menus = ref([]);
 //需要展开的path
@@ -61,26 +50,35 @@ onMounted(() => {
 function showMenu(arr) {
     var menusArr = [];
     arr.forEach((val) => {
-        if (val.meta) {
-            if (val.meta.show) {
-                if (val.children.length) {
-                    var child = [];
-                    val.children.forEach((cval) => {
-                        if (cval.meta.show) {
-                            child.push(cval);
-                        }
-                    });
-                    val.children = child;
-                    menusArr.push(val);
-                } else {
+        if (val.meta && val.meta.show) {
+            if (val.children && val.children.length) {
+                val.children = filterChildren(val.children);
+                if (val.children.length > 0) {
                     menusArr.push(val);
                 }
+            } else {
+                menusArr.push(val);
             }
         }
     });
     menus.value = menusArr;
 }
+
+//递归过滤children
+function filterChildren(children) {
+    return children.filter((child) => {
+        if (child.meta && child.meta.show) {
+            if (child.children && child.children.length) {
+                child.children = filterChildren(child.children);
+                return child.children.length > 0;
+            }
+            return true;
+        }
+        return false;
+    });
+}
 </script>
+
 <style lang="scss" scoped>
 .sidebar-container {
     width: 210px;

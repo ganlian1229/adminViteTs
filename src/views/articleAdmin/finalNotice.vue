@@ -16,19 +16,22 @@
             <span class="text">数字：</span>
             <el-input v-numbers v-model="formData.number"></el-input>
         </p>
-        <el-button v-longpress="submitFun">长按2秒提交</el-button>
+        <el-button @click="jumpDetails">跳转到详情</el-button>
     </div>
 </template>
 <script setup lang="ts">
+const router = useRouter();
 let formData = reactive({
     userName: '',
     password: '',
     phoneNumber: '',
     number: ''
 });
-let submitFun = () => {
-    console.log(11111);
-};
+function jumpDetails() {
+    router.push({
+        path: '/articleAdmin/testDetails/' + new Date().getTime()
+    });
+}
 </script>
 <style lang="scss">
 .article-admin {

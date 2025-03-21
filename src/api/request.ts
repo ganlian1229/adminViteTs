@@ -6,16 +6,7 @@ const router = useRouter();
 Axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'; //JSON
 let baseURL = '';
 // console.log('import.meta.env', import.meta.env);
-// switch (process.env.VUE_APP_CURRENTMODE) {
-//     case 'production':
-//         //运行 npm run build时候
-//         Axios.defaults.baseURL = 'https://ty.fengyugo.com/golf1231232/';
-//         break;
-//     default:
-//         //本地运行的时候（需要跨域）
-//         Axios.defaults.baseURL = '/request';
-//         break;
-// }
+
 const service = Axios.create({
     baseURL: baseURL, // url = base url + request url
     timeout: 5000 // request timeout
@@ -69,43 +60,45 @@ function handlerActiveRequests() {
 // Axios请求前
 Axios.interceptors.request.use(
     (config: any) => {
-        // if (activeRequests >= MAXREQUEST) {
-        //     // 否则，将请求添加到队列中等待执行
-        //     requestQueue.push(config);
-        //     return new Promise<AxiosRequestConfig>((resolve) => {
-        //         setTimeout(() => {
-        //             const queuedRequest = requestQueue.shift();
-        //             if (queuedRequest) {
-        //                 activeRequests++;
-        //                 resolve(queuedRequest);
-        //             }
-        //         }, 0);
-        //     });
-        // } else {
-        //     // 如果当前正在执行的请求数量小于最大并发数，则立即执行
-        //     activeRequests++;
-        // let token = sessionStorage.getItem('token');
-        // token && (config.headers.Authorization = `Bearer ${token}`);
-        return config;
-        // }
+        if (activeRequests >= MAXREQUEST) {
+            // 如果当前正在执行的请求数量大于等于最大并发数，将请求添加到队列中等待执行
+            return new Promise<AxiosRequestConfig>((resolve) => {
+                requestQueue.push(config);
+                const interval = setInterval(() => {
+                    if (activeRequests < MAXREQUEST) {
+                        clearInterval(interval);
+                        const queuedRequest = requestQueue.shift();
+                        if (queuedRequest) {
+                            activeRequests++;
+                            resolve(queuedRequest);
+                        }
+                    }
+                }, 100);
+            });
+        } else {
+            // 如果当前正在执行的请求数量小于最大并发数，则立即执行
+            activeRequests++;
+            return config;
+        }
     },
     (err: AxiosError) => {
         ElMessage.error('参数错误');
         return Promise.reject(err);
     }
 );
+
 //Axios响应拦截器
 Axios.interceptors.response.use(
     (response: AxiosResponse) => {
-        // handlerActiveRequests();
+        handlerActiveRequests();
         return response;
     },
     (err: AxiosError) => {
-        console.log('err', err);
-        // handlerActiveRequests();
+        handlerActiveRequests();
         return Promise.reject(err);
     }
 );
+
 interface requestParams {
     hideLoading?: boolean;
     [key: string]: any;

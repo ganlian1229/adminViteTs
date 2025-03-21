@@ -29,12 +29,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { get } from '@/api/request';
+import api, { InferredApiModule } from '@/api';
 import storeObj from '@/store';
 import globalFun from '@/utils/globalFun';
-defineOptions({
-    name: 'mainVue'
-});
+console.log('api', api);
 
 let idObj = {
     id: useId(),
@@ -49,11 +47,11 @@ let globalComObj = ref({
 
 function testRequest() {
     let maxNumber = 10;
-    for (let i = 0; i < maxNumber; i++) {
-        get(`http://127.0.0.1:3000/api/test`, { index: maxNumber - i }).then(() => {
-            console.log(`请求完成${maxNumber - i}`);
-        });
-    }
+    // for (let i = 0; i < maxNumber; i++) {
+    //     api.request.get(`http://127.0.0.1:3000/api/test`, { index: maxNumber - i }).then(() => {
+    //         console.log(`请求完成${maxNumber - i}`);
+    //     });
+    // }
 }
 
 watch(
@@ -106,11 +104,6 @@ function getDataList() {
         });
     }
 }
-
-// let a = ?
-// if(a == 1 && a == 2 && a == 3){
-//     console.log(1111)
-// }
 </script>
 <style lang="scss">
 .main-index {

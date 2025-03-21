@@ -2,7 +2,13 @@
     <div class="globalCom">
         <p>动态添加的全局组件2</p>
         <ul class="tab-list">
-            <li class="tab-item" :class="actIndex === index ? 'act' : ''" v-for="(item, index) in list" :key="index" @click="change(index)">
+            <li
+                class="tab-item"
+                :class="actIndex === index ? 'act' : ''"
+                v-for="(item, index) in list"
+                :key="index"
+                @click="change(index)"
+            >
                 {{ item.name }}
             </li>
         </ul>
@@ -12,9 +18,19 @@
         <ul>
             <li v-for="(item, index) in dataList" :key="index">
                 <span>{{ item.elName.name }}:</span>
-                <component :is="item.elName" v-model="item.value" :options="item.options" @change="handlerChange(index, $event)">
+                <component
+                    :is="item.elName"
+                    v-model="item.value"
+                    :options="item.options"
+                    @change="handlerChange(index, $event)"
+                >
                     <template v-if="item.elName.name === 'ElSelect'">
-                        <el-option v-for="(option, optionIndex) in item.options" :key="optionIndex" :label="option.label" :value="option.value" />
+                        <el-option
+                            v-for="(option, optionIndex) in item.options"
+                            :key="optionIndex"
+                            :label="option.label"
+                            :value="option.value"
+                        />
                     </template>
                 </component>
             </li>

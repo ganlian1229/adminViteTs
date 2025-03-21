@@ -1,7 +1,11 @@
 <!-- 标签页 -->
 <template>
     <div class="tags-view">
-        <router-link :class="route.path === '/main/index' ? 'active' : ''" class="tags-view-item house-link" :to="{ path: '/main/index' }">
+        <router-link
+            :class="route.path === '/main/index' ? 'active' : ''"
+            class="tags-view-item house-link"
+            :to="{ path: '/main/index' }"
+        >
             <el-icon>
                 <component :is="'House'"></component>
             </el-icon>
@@ -24,7 +28,11 @@
             </div>
         </el-scrollbar>
 
-        <ul v-show="menuObj.visible" :style="{ left: menuObj.left + 'px', top: menuObj.top + 'px' }" class="contextmenu">
+        <ul
+            v-show="menuObj.visible"
+            :style="{ left: menuObj.left + 'px', top: menuObj.top + 'px' }"
+            class="contextmenu"
+        >
             <li @click="closeSelectedTag(menuObj.selectedTag)">关闭当前</li>
             <li @click="closeOthersTags">关闭其它</li>
             <li @click="closeAllTags">关闭所有</li>

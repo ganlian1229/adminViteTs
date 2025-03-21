@@ -7,7 +7,7 @@ module.exports = {
             }
         }
     ],
-    printWidth: 150, // 一行最多 100 字符
+    printWidth: 120, // 一行最多 100 字符
     tabWidth: 4, // 使用 4 个空格缩进
     semi: true, // 行尾需要有分号
     singleQuote: true, // 使用单引号而不是双引号
