@@ -29,7 +29,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import api, { InferredApiModule } from '@/api';
+import api, { ApiType } from '@/api';
 import storeObj from '@/store';
 import globalFun from '@/utils/globalFun';
 console.log('api', api);

@@ -6,6 +6,7 @@ import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import';
 import { visualizer } from 'rollup-plugin-visualizer';
+import vitePluginApiTypes from './vite-plugin-api-types.ts';
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
     return {
@@ -24,6 +25,12 @@ export default defineConfig(({ command }) => {
         },
         plugins: [
             vue(),
+            vitePluginApiTypes({
+                apiDir: 'src/api',
+                typesDir: 'src',
+                typesFileName: 'api-types.d.ts',
+                verbose: true
+            }),
             AutoImport({
                 resolvers: [ElementPlusResolver()],
                 imports: [

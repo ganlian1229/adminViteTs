@@ -1,22 +1,22 @@
-// 定义一个接口来描述 api 对象的结构
-interface ApiModule {
-    [key: string]: any;
-}
+import type { ApiModules } from '../api-types.d';
 
-const api: ApiModule = {};
-const modules = import.meta.glob('../api/*.ts', { eager: true }) as any;
-Object.entries(modules).forEach(([fileName, mod]: [string, any]) => {
-    // 驼峰命名
-    console.log('fileName', fileName);
-    console.log('mod', mod);
-    const moduleName = fileName
-        ?.split('/')
-        ?.pop()
-        ?.replace(/\.\w+$/, '');
-    console.log('moduleName', moduleName);
-    api[moduleName] = mod;
+const moduleFiles = import.meta.glob('./*.ts', { eager: true });
+
+// 创建 API 对象，使用类型断言来获得准确的类型提示
+const api = {} as ApiModules;
+
+Object.entries(moduleFiles).forEach(([filePath, moduleExports]) => {
+    const fileName = filePath.split('/').pop();
+    if (!fileName) return;
+
+    const moduleName = fileName.replace('.ts', '') as keyof ApiModules;
+
+    if (fileName.endsWith('.d.ts')) return;
+
+    // 使用类型断言，让 TypeScript 知道这个赋值是正确的
+    (api as any)[moduleName] = moduleExports;
 });
 
-// 导出推断后的类型
-export type InferredApiModule = typeof api;
-export default api;
+// 导出类型和 API 对象
+export type { ApiModules as ApiType };
+export default api as ApiModules;

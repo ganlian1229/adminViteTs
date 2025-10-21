@@ -7,5 +7,5 @@
         "allowJs": true, // 允许编译器编译JS，JSX文件
         "types": ["node", "vite/client"]
     },
-    "include": ["vite.config.*"]
+    "include": ["vite.config.*", "vite-plugin-*.ts"]
 }

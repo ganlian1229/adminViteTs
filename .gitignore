@@ -24,6 +24,5 @@ dist-ssr
 *.sw?
 .eslintrc-auto-import.json
 pnpm-lock.yaml
-src/components.d.ts
-src/auto-import.d.ts
+src/*.d.ts
 stats.html
