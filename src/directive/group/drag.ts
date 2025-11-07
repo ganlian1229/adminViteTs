@@ -25,20 +25,14 @@ let drag = {
             dragDom = el;
             callback = value;
         } else if (value?.dom) {
-            let dom = value.dom;
-            if (dom) {
-                let rawNameArr = dom.split('.');
-                if (rawNameArr.length > 1) {
-                    for (let i = 1; i < rawNameArr.length; i++) {
-                        if (i == 1) {
-                            dragDom = el.parentElement;
-                        } else {
-                            dragDom = dragDom.parentElement;
-                        }
-                    }
-                } else {
-                    dragDom = el;
-                }
+            const dom = value.dom;
+            const rawNameArr = dom.split('.');
+
+            // 根据层级向上查找父元素
+            if (rawNameArr.length > 1) {
+                dragDom = el;
+                // 直接用slice和reduce简化原for循环逻辑
+                dragDom = rawNameArr.slice(1).reduce((parent, _) => parent.parentElement, el);
             } else {
                 dragDom = el;
             }
