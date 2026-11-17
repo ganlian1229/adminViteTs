@@ -1,4 +1,4 @@
-<!-- 公共表格手动测试页 -->
+<!-- 公共表格与抽屉手动测试页 -->
 <template>
     <div class="file-list">
         <section class="test-panel">
@@ -28,6 +28,21 @@
                 开启“空数据”后可组合测试搜索空状态、表头隐藏和横向滚动；关闭“使用 columns”可测试默认插槽。分页别名切换
                 page/currentPage 和 layout/paginationLayout。
             </div>
+        </section>
+
+        <section class="test-panel">
+            <div class="panel-title">commonDrawer 抽屉验证</div>
+            <elForm class="test-controls" :inline="true" labelPosition="left">
+                <elFormItem label="长内容"><elSwitch v-model="drawerOptions.longContent" /></elFormItem>
+                <elFormItem label="自定义标题"><elSwitch v-model="drawerOptions.customTitle" /></elFormItem>
+                <elFormItem label="显示底部"><elSwitch v-model="drawerOptions.showFooter" /></elFormItem>
+                <elFormItem label="阻止关闭"><elSwitch v-model="drawerOptions.blockClose" /></elFormItem>
+            </elForm>
+            <div class="tool-actions">
+                <elButton type="primary" @click="handleOpenTestDrawer">打开抽屉验证</elButton>
+                <elTag>visible：{{ drawerVisible }}</elTag>
+            </div>
+            <div class="test-hint">{{ drawerEvent }}</div>
         </section>
 
         <commonTable
@@ -113,6 +128,55 @@
             </template>
         </commonTable>
 
+        <commonDrawer
+            ref="commonDrawerRef"
+            v-model:visible="drawerVisible"
+            title="公共抽屉测试"
+            size="600px"
+            appendToBody
+            :beforeClose="handleBeforeDrawerClose"
+            @open="handleDrawerEvent('open')"
+            @opened="handleDrawerEvent('opened')"
+            @close="handleDrawerEvent('close')"
+            @closed="handleDrawerEvent('closed')"
+        >
+            <template v-if="drawerOptions.customTitle" #title="{ close, titleId }">
+                <div class="slot-heading">
+                    <span :id="titleId" class="heading-text">title 插槽：自定义抽屉标题</span>
+                    <elButton link type="primary" @click="close">插槽关闭</elButton>
+                </div>
+            </template>
+            <div class="drawer-demo">
+                <div class="demo-controls">
+                    <div class="demo-hint">
+                        滚动下方长内容，检查标题和底部操作区是否保持位置；也可尝试关闭按钮、遮罩和 Esc。
+                    </div>
+                    <div class="guard-control">
+                        <span class="control-label">beforeClose 阻止关闭</span>
+                        <elSwitch v-model="drawerOptions.blockClose" />
+                    </div>
+                    <div class="demo-status">{{ drawerEvent }}</div>
+                    <elButton @click="handleCloseTestDrawer">调用 closeDrawer()</elButton>
+                </div>
+                <div
+                    v-for="row in drawerOptions.longContent ? tableData : tableData.slice(0, 2)"
+                    :key="row.id"
+                    class="demo-row"
+                >
+                    <div class="row-title">第 {{ row.id }} 条：{{ row.name }}</div>
+                    <div class="row-detail">日期：{{ row.date }}，年龄：{{ row.age }}</div>
+                    <div class="row-detail">{{ row.address }}</div>
+                </div>
+                <div class="end-note">已到达内容底部，可检查最后一条是否完整显示。</div>
+            </div>
+            <template v-if="drawerOptions.showFooter" #footer>
+                <div class="footer-actions">
+                    <span class="footer-hint">footer 插槽：底部操作区</span>
+                    <elButton type="primary" @click="handleCloseTestDrawer">关闭抽屉</elButton>
+                </div>
+            </template>
+        </commonDrawer>
+
         <section class="event-panel">
             <div class="panel-title">最近一次事件 / 实例检查</div>
             <div class="event-result">{{ lastEvent }}</div>
@@ -136,6 +200,65 @@ import {
     type TableColumnCtx
 } from 'element-plus';
 import commonTable from '@/componentsGlobal/commonTable.vue';
+import commonDrawer from '@/componentsGlobal/commonDrawer.vue';
+
+/** 公共抽屉实例，用于验证公开的关闭方法。 */
+const commonDrawerRef = ref<InstanceType<typeof commonDrawer>>();
+/** 抽屉显示状态，用于验证 v-model:visible 双向同步。 */
+const drawerVisible = ref(false);
+/** 抽屉验证选项。 */
+const drawerOptions = reactive({
+    /** 使用全部现有行生成长内容，关闭后仅显示两条。 */
+    longContent: true,
+    /** 是否提供 title 插槽。 */
+    customTitle: true,
+    /** 是否提供 footer 插槽。 */
+    showFooter: true,
+    /** 是否通过 beforeClose 阻止本次关闭。 */
+    blockClose: false
+});
+/** 最近一次抽屉事件或关闭拦截结果。 */
+const drawerEvent = ref('点击“打开抽屉验证”，检查滚动、插槽及关闭行为。');
+
+/**
+ * 打开测试抽屉。
+ * @returns 无返回值。
+ * @remarks 无参数；将 drawerVisible 设为 true。
+ */
+function handleOpenTestDrawer(): void {
+    drawerVisible.value = true;
+}
+/**
+ * 通过公共组件公开方法关闭抽屉。
+ * @returns 无返回值。
+ * @remarks 无参数；调用 closeDrawer，触发抽屉的 beforeClose 流程。
+ */
+function handleCloseTestDrawer(): void {
+    commonDrawerRef.value?.closeDrawer();
+}
+/**
+ * 验证关闭钩子可放行或阻止关闭。
+ * @param done Element Plus 提供的关闭回调。
+ * @returns 无返回值。
+ * @remarks 更新测试提示；允许关闭时调用 done，阻止时不调用。
+ */
+function handleBeforeDrawerClose(done: () => void): void {
+    if (drawerOptions.blockClose) {
+        drawerEvent.value = 'beforeClose：已阻止关闭，可在抽屉内关闭“阻止关闭”开关后重试。';
+        return;
+    }
+    drawerEvent.value = 'beforeClose：允许关闭';
+    done();
+}
+/**
+ * 显示抽屉透传的生命周期事件。
+ * @param event 当前事件名称。
+ * @returns 无返回值。
+ * @remarks 更新抽屉事件提示。
+ */
+function handleDrawerEvent(event: string): void {
+    drawerEvent.value = '抽屉事件：' + event;
+}
 
 /** 测试行字段，直接供表格和插槽读取。 */
 interface FileRow {
@@ -505,5 +628,63 @@ function handleCheckRefs(): void {
 }
 .custom-cell {
     color: var(--el-color-success);
+}
+.slot-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex: 1;
+    .heading-text {
+        font-weight: bold;
+    }
+}
+.drawer-demo {
+    .demo-controls {
+        padding: 16px 0;
+        box-sizing: border-box;
+        .demo-hint {
+            line-height: 1.7;
+            color: var(--el-text-color-secondary);
+        }
+        .guard-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .demo-status {
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: var(--el-color-primary);
+        }
+    }
+    .demo-row {
+        padding: 16px 0;
+        box-sizing: border-box;
+        border-bottom: 1px solid var(--el-border-color-lighter);
+        .row-title {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .row-detail {
+            line-height: 1.8;
+            color: var(--el-text-color-secondary);
+        }
+    }
+    .end-note {
+        padding: 20px 0;
+        box-sizing: border-box;
+        color: var(--el-color-success);
+    }
+}
+.footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    .footer-hint {
+        color: var(--el-text-color-secondary);
+    }
 }
 </style>
