@@ -1,6 +1,10 @@
 <!-- 公共表格、抽屉与弹窗手动测试页 -->
 <template>
-    <div class="file-list">
+    <div class="file-list content-page">
+        <div class="page-heading">
+            <h1 class="page-title">公共组件演示</h1>
+            <p class="page-description">在真实交互中验证表格、抽屉与弹窗的能力。</p>
+        </div>
         <section class="test-panel">
             <div class="panel-title">commonTable 属性测试</div>
             <elForm class="test-controls" :inline="true" labelPosition="left">
@@ -80,7 +84,6 @@
             showOverflowTooltip
             border
             height="500"
-            stripe
             :allowDragLastColumn="false"
             rowKey="id"
             @sizeChange="handleSizeChange"
@@ -701,11 +704,16 @@ function handleCheckRefs(): void {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    .page-heading {
+        .page-description {
+            margin-bottom: 8px;
+        }
+    }
     .test-panel {
-        padding: 16px;
+        padding: 22px;
         box-sizing: border-box;
-        border: 1px solid var(--el-border-color);
-        border-radius: 4px;
+        border: 1px solid var(--app-border);
+        border-radius: 8px;
         .panel-title {
             margin-bottom: 12px;
             font-weight: bold;
@@ -722,10 +730,10 @@ function handleCheckRefs(): void {
         }
     }
     .event-panel {
-        padding: 16px;
+        padding: 22px;
         box-sizing: border-box;
-        border: 1px solid var(--el-border-color);
-        border-radius: 4px;
+        border: 1px solid var(--app-border);
+        border-radius: 8px;
         .panel-title {
             margin-bottom: 10px;
             font-weight: bold;

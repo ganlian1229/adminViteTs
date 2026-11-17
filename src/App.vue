@@ -5,8 +5,6 @@
 </template>
 <script setup lang="ts">
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
+import '@/assets/css/index.scss';
+import '@/assets/css/theme.scss';
 </script>
-<style lang="scss">
-// 全局样式
-@use '@/assets/css/index.scss' as *;
-</style>

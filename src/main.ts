@@ -1,5 +1,8 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+// 使用根节点 class 承载全局主题。
+document.documentElement.classList.add('app-document');
+document.body.classList.add('app-document');
 const app = createApp(App);
 app.config.idPrefix = 'admin';
 //使用自定义指令

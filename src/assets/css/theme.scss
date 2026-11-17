@@ -1,0 +1,85 @@
+// 工作台统一设计变量，业务组件继承主题。
+:root {
+    --app-frame: #f1f4f5;
+    --app-surface: #ffffff;
+    --app-ink: #20282d;
+    --app-muted: #5d6b73;
+    --app-border: #e6ebed;
+    --app-accent: #1b6c80;
+    --el-color-primary: #1b6c80;
+    --el-color-primary-light-3: #5f98a6;
+    --el-color-primary-light-5: #8db5bf;
+    --el-color-primary-light-7: #bad3d9;
+    --el-color-primary-light-8: #d1e2e6;
+    --el-color-primary-light-9: #e8f0f2;
+    --el-color-primary-dark-2: #165666;
+    --el-text-color-primary: #20282d;
+    --el-text-color-regular: #47565f;
+    --el-text-color-secondary: #68767e;
+    --el-border-color: #d7dfe2;
+    --el-border-color-light: #e6ebed;
+    --el-border-color-lighter: #edf0f2;
+    --el-fill-color-light: #f5f7f8;
+    --el-border-radius-base: 6px;
+    --el-font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+.app-document {
+    margin: 0;
+    background: var(--app-frame);
+    color: var(--app-ink);
+    font-family: var(--el-font-family);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+}
+.el-button {
+    font-family: var(--el-font-family);
+    font-weight: bold;
+    min-height: 34px;
+    &:focus-visible {
+        outline: 2px solid var(--app-accent);
+        outline-offset: 3px;
+    }
+}
+.el-input,
+.el-select,
+.el-textarea,
+.el-date-editor {
+    font-family: var(--el-font-family);
+}
+.common-dialog {
+    border-radius: 12px;
+    max-width: calc(100vw - 32px);
+    .el-dialog__header {
+        margin-bottom: 16px;
+    }
+    .el-dialog__footer {
+        padding-top: 20px;
+        box-sizing: border-box;
+        border-top: 1px solid var(--app-border);
+    }
+}
+.common-drawer {
+    max-width: 100vw;
+    .el-drawer__header {
+        margin-bottom: 20px;
+        color: var(--app-ink);
+    }
+}
+
+// 页面公共排版类，具体业务样式仍由各页 scoped SCSS 管理。
+.content-page {
+    min-width: 0;
+    .page-title {
+        margin: 0 0 10px;
+        font-size: 24px;
+        line-height: 1.4;
+        font-weight: bold;
+    }
+    .page-description {
+        margin: 0 0 28px;
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--app-muted);
+    }
+}

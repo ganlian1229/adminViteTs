@@ -1,207 +1,194 @@
-<!-- 标签页 -->
 <template>
     <div class="tags-view">
-        <router-link
-            :class="route.path === '/main/index' ? 'active' : ''"
-            class="tags-view-item house-link"
-            :to="{ path: '/main/index' }"
+        <router-link class="home-link" :class="{ 'is-active': route.path === '/main/index' }" to="/main/index"
+            ><el-icon><House /></el-icon><span>首页</span></router-link
         >
-            <el-icon>
-                <component :is="'House'"></component>
-            </el-icon>
-        </router-link>
-        <el-scrollbar @handleScroll="handlerScroll">
-            <div class="scrollbar-flex-content">
+        <el-scrollbar class="tag-scrollbar" @scroll="closeMenu">
+            <div class="tag-list">
                 <router-link
                     v-for="tag in visitedViews"
                     :key="tag.path"
-                    class="tags-view-item"
-                    :to="{ path: tag.path }"
-                    @click.middle.native="closeSelectedTag(tag)"
-                    @contextmenu.prevent.native="openMenu(tag, $event)"
+                    class="tag-item"
+                    :class="{ 'is-active': route.path === tag.path }"
+                    :to="tag.path"
+                    @click.middle="closeSelectedTag(tag)"
+                    @contextmenu.prevent="openMenu(tag, $event)"
                 >
-                    <span>{{ tag.title }}</span>
-                    <el-icon class="icon-close" @click.prevent.stop="closeSelectedTag(tag)">
-                        <component :is="'Close'"></component>
-                    </el-icon>
+                    <span class="tag-title">{{ tag.title }}</span>
+                    <button
+                        class="close-button"
+                        :aria-label="`关闭${tag.title}`"
+                        @click.prevent.stop="closeSelectedTag(tag)"
+                    >
+                        <el-icon><Close /></el-icon>
+                    </button>
                 </router-link>
             </div>
         </el-scrollbar>
-
-        <ul
-            v-show="menuObj.visible"
+        <div
+            v-if="menuObj.visible"
+            class="context-menu"
             :style="{ left: menuObj.left + 'px', top: menuObj.top + 'px' }"
-            class="contextmenu"
+            @keydown.esc="closeMenu"
         >
-            <li @click="closeSelectedTag(menuObj.selectedTag)">关闭当前</li>
-            <li @click="closeOthersTags">关闭其它</li>
-            <li @click="closeAllTags">关闭所有</li>
-        </ul>
+            <button class="menu-item" @click="closeSelectedTag(menuObj.selectedTag)">关闭当前</button>
+            <button class="menu-item" @click="closeOthersTags">关闭其它</button>
+            <button class="menu-item" @click="closeAllTags">关闭所有</button>
+        </div>
     </div>
 </template>
-
 <script setup>
 import storeObj from '@/store';
+/** 路由导航实例。 */
 const router = useRouter();
+/** 当前页面路由。 */
 const route = useRoute();
-
+/** 已访问的标签列表，保持 Pinia 响应性。 */
 const { visitedViews } = storeToRefs(storeObj.tagsViewStore);
+/** 标签增删操作。 */
 const { addView, closeView, closeMultipleView } = storeObj.tagsViewStore;
-
+/** 右键菜单位置及目标标签。 */
+const menuObj = reactive({ visible: false, left: 0, top: 0, selectedTag: {} });
+/** 跟踪路由；newVal 为当前路由；无返回值；非首页时记录标签。 */
 watch(
-    () => route,
-    (newVal) => {
-        console.log('routeName', newVal.name);
-        if (newVal.path != '/main/index') {
-            addView(newVal);
-        }
+    () => route.fullPath,
+    () => {
+        if (route.path !== '/main/index') addView(route);
     },
-    {
-        deep: true,
-        immediate: true
-    }
+    { immediate: true }
 );
-
-/**
- * @description: 关闭标签
- * @param {*} tag
- * @return {*}
- */
+/** 关闭指定标签；tag 为目标；无返回值；关闭当前页时导航至最后一页。 */
 function closeSelectedTag(tag) {
     closeView(tag);
-    if (tag.path == route.path) {
-        toLastView();
-    }
+    if (tag.path === route.path) toLastView();
+    closeMenu();
 }
-
-/**
- * @description: 关闭其他标签
- * @return {*}
- */
+/** 关闭其他标签；无参数、无返回值；更新 Pinia 并导航。 */
 function closeOthersTags() {
-    const closetViewArr = visitedViews.value.filter((item) => item.path != menuObj.selectedTag.path);
-    closeMultipleView(closetViewArr);
+    closeMultipleView(visitedViews.value.filter((item) => item.path !== menuObj.selectedTag.path));
     toLastView();
 }
-/**
- * @description: 关闭所有标签
- * @return {*}
- */
+/** 关闭全部标签；无参数、无返回值；清空访问列表并导航首页。 */
 function closeAllTags() {
     closeMultipleView(visitedViews.value);
     toLastView();
 }
-/**
- * @description: 切换至最后一个标签
- * @return {*}
- */
+/** 打开最后访问页；无参数、无返回值；改变当前路由。 */
 function toLastView() {
-    const lastView = visitedViews.value[visitedViews.value.length - 1];
-    if (lastView) {
-        router.push(lastView);
-    } else {
-        router.push({
-            path: '/main/index'
-        });
-    }
+    router.push(visitedViews.value[visitedViews.value.length - 1] || '/main/index');
 }
-
-const menuObj = reactive({
-    visible: false,
-    left: 0,
-    top: 0,
-    selectedTag: {}
-});
+/** 显示菜单；tag 为标签，event 为鼠标事件；无返回值；更新菜单位置和可见性。 */
 function openMenu(tag, event) {
-    const maxLeft = document.body.clientWidth - 80; // left boundary
-    const left = event.clientX - 30;
-    if (left > maxLeft) {
-        menuObj.left = maxLeft;
-    } else {
-        menuObj.left = left;
-    }
-    menuObj.top = event.clientY + 5;
-    menuObj.visible = true;
-    menuObj.selectedTag = tag;
+    Object.assign(menuObj, {
+        left: Math.max(8, Math.min(event.clientX, window.innerWidth - 136)),
+        top: Math.min(event.clientY + 5, window.innerHeight - 132),
+        visible: true,
+        selectedTag: tag
+    });
 }
-
+/** 收起菜单；无参数、无返回值；更新可见性。 */
 function closeMenu() {
     menuObj.visible = false;
 }
-
+/** 绑定外部点击；无参数、无返回值；注册全局事件。 */
 onMounted(() => {
     window.addEventListener('click', closeMenu);
 });
-
-function handlerScroll() {
-    console.log('handlerScroll');
-    if (menuObj.visible) {
-        closeMenu();
-    }
-}
+/** 清理外部点击；无参数、无返回值；移除全局事件。 */
+onUnmounted(() => {
+    window.removeEventListener('click', closeMenu);
+});
 </script>
-
 <style lang="scss" scoped>
 .tags-view {
+    height: 40px;
     display: flex;
-    height: 30px;
-
-    .scrollbar-flex-content {
+    align-items: stretch;
+    gap: 12px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    .home-link {
         display: flex;
-    }
-    .tags-view-item {
-        padding: 0 12px;
-        margin-left: 15px;
-        border: 1px solid #d8dce5;
-        border-radius: 4px;
-        background: rgba(255, 143, 51, 0.1);
-        color: #ff8f33;
-        line-height: 1.8;
-        font-size: 14px;
-        position: relative;
-
-        &.house-link {
-            margin-left: 5px;
-        }
-
-        &.router-link-active {
-            background: rgba(255, 143, 51, 1);
-            color: #fff;
-            border-color: #ff8f33;
-
-            .icon-close {
-                display: inline-block;
-            }
-        }
-
-        .icon-close {
-            display: none;
-            margin-left: 5px;
-            position: relative;
-            top: 2px;
-            border-radius: 50%;
-            &:hover {
-                background-color: #b4bccc;
-                color: #fff;
-            }
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        color: var(--app-muted);
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        flex-shrink: 0;
+        &.is-active {
+            border-bottom-color: var(--app-accent);
+            color: var(--app-ink);
+            font-weight: bold;
         }
     }
-
-    .contextmenu {
-        background: #fff;
+    .tag-scrollbar {
+        flex: 1;
+        min-width: 0;
+        .tag-list {
+            display: flex;
+            height: 40px;
+            gap: 16px;
+            width: max-content;
+            .tag-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 13px;
+                color: var(--app-muted);
+                border-bottom: 2px solid transparent;
+                text-decoration: none;
+                box-sizing: border-box;
+                &.is-active {
+                    border-bottom-color: var(--app-accent);
+                    color: var(--app-ink);
+                    font-weight: bold;
+                }
+                &:hover {
+                    color: var(--app-ink);
+                }
+                .tag-title {
+                    white-space: nowrap;
+                }
+                .close-button {
+                    border: 0;
+                    background: transparent;
+                    color: var(--app-muted);
+                    display: grid;
+                    place-items: center;
+                    width: 22px;
+                    height: 24px;
+                    cursor: pointer;
+                    border-radius: 4px;
+                    &:hover {
+                        background: #dfe5e8;
+                    }
+                }
+            }
+        }
+    }
+    .context-menu {
+        position: fixed;
         z-index: 3000;
-        position: absolute;
-        padding: 5px 0;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: 400;
-        color: #333;
-        box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-        li {
-            padding: 7px 16px;
+        background: #fff;
+        border: 1px solid var(--app-border);
+        border-radius: 8px;
+        padding: 5px;
+        box-sizing: border-box;
+        box-shadow: 0 6px 20px rgb(20 30 36 / 12%);
+        .menu-item {
+            display: block;
+            width: 120px;
+            border: 0;
+            background: transparent;
+            padding: 9px 14px;
+            box-sizing: border-box;
+            text-align: left;
+            color: var(--app-ink);
             cursor: pointer;
+            border-radius: 4px;
             &:hover {
-                background: #eee;
+                background: var(--app-frame);
             }
         }
     }

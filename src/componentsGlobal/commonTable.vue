@@ -408,6 +408,8 @@ defineExpose({ getTableRef, getPaginationRef });
 
 <style lang="scss" scoped>
 .common-table {
+    min-width: 0;
+    font-variant-numeric: tabular-nums;
     &.is-empty:not(.is-empty-scrollable) {
         :deep(.el-table) {
             height: auto !important;
@@ -427,11 +429,20 @@ defineExpose({ getTableRef, getPaginationRef });
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding-bottom: 10px;
+                gap: 12px;
+                flex-wrap: wrap;
+                padding-bottom: 16px;
                 box-sizing: border-box;
             }
             .table-box {
                 .data-table {
+                    --el-table-header-bg-color: #ffffff;
+                    --el-table-header-text-color: var(--app-muted, #68767e);
+                    --el-table-row-hover-bg-color: #f5f8f9;
+                    :deep(.el-table__cell) {
+                        padding: 14px 0;
+                        box-sizing: border-box;
+                    }
                     :deep(.el-table__empty-block) {
                         position: sticky;
                         left: 0;
@@ -440,13 +451,20 @@ defineExpose({ getTableRef, getPaginationRef });
                 }
             }
         }
+        .pagination-box {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 20px;
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
     }
 }
 .empty-box {
     width: 100%;
     min-height: 260px;
     text-align: center;
-    padding-top: 100px;
+    padding: 100px 20px 40px;
     box-sizing: border-box;
     &.is-in-table {
         min-height: 0;
@@ -454,7 +472,7 @@ defineExpose({ getTableRef, getPaginationRef });
         box-sizing: border-box;
     }
     .empty-text {
-        color: #999999;
+        color: var(--app-muted, #68767e);
         font-size: 14px;
     }
 }

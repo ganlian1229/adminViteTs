@@ -1,8 +1,8 @@
 <template>
-    <div class="article-admin" id="articleAdmin">
-        <h1 class="other">球场预定规则</h1>
+    <div class="article-admin content-page" id="articleAdmin">
+        <h1 class="page-title">球场预定规则</h1>
         <div class="other">其他东西</div>
-        <div class="scrollBox" id="scrollBox">
+        <div class="scroll-box" id="scrollBox">
             <p class="box-item" v-for="(item, index) in dataList" :key="index">
                 {{ index + 1 }}
             </p>
@@ -23,10 +23,12 @@ let scrollBoxHeight = ref(0);
 let scrollBoxOffsetTop = ref(0);
 //是否加载中
 let isLoading = ref(false);
+/** 挂载示例；无参数、无返回值；加载数据并绑定滚动。 */
 onMounted(() => {
     addData();
     window.addEventListener('scroll', scrollFun, false);
 });
+/** 滚动加载；无参数、无返回值；满足阈值时追加数据。 */
 function scrollFun() {
     var scrollTop = 0;
     if (document.documentElement && document.documentElement.scrollTop) {
@@ -48,6 +50,7 @@ function scrollFun() {
         }, 1000);
     }
 }
+/** 追加示例；无参数、无返回值；更新列表并测量滚动区。 */
 function addData() {
     for (let i = 0; i <= 10; i++) {
         dataList.value.push({});
@@ -62,18 +65,25 @@ function addData() {
         console.log(scrollBoxOffsetTop.value);
     });
 }
+/** 释放滚动监听；无参数、无返回值；移除全局监听。 */
+onUnmounted(() => {
+    window.removeEventListener('scroll', scrollFun);
+});
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .article-admin {
-    background-color: transparent !important;
     .other {
         font-size: 20px;
-        padding-bottom: 150px;
+        padding-bottom: 28px;
+        box-sizing: border-box;
+        color: var(--app-muted);
     }
-    .scrollBox {
+    .scroll-box {
         .box-item {
-            font-size: 24px;
-            padding-bottom: 50px;
+            font-size: 14px;
+            padding: 16px;
+            box-sizing: border-box;
+            border-bottom: 1px solid var(--app-border);
         }
     }
 }
