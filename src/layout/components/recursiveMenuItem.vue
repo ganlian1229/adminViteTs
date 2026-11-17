@@ -6,7 +6,7 @@
             </el-icon>
             <span>{{ item.meta.title }}</span>
         </template>
-        <RecursiveMenuItem
+        <recursiveMenuItem
             :isChildren="true"
             v-for="child in item.children"
             :key="child.path"

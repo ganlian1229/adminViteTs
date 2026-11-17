@@ -13,7 +13,7 @@
             >
                 <template v-for="item in menus">
                     <template v-if="item.meta.show">
-                        <RecursiveMenuItem :item="item" :parentPath="item.path" :key="item.path" />
+                        <recursiveMenuItem :item="item" :parentPath="item.path" :key="item.path" />
                     </template>
                 </template>
             </el-menu>
@@ -26,7 +26,7 @@ import dynamicRouter from '@/router/dynamicRouter';
 import { deepCopy } from '@/utils';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import RecursiveMenuItem from './RecursiveMenuItem.vue';
+import recursiveMenuItem from './recursiveMenuItem.vue';
 
 const route = useRoute();
 const router = useRouter();
