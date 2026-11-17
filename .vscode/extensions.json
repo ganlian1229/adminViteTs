@@ -1,9 +1,119 @@
 {
-    "recommendations": [
-        "Vue.volar"
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "javascript.preferences.quoteStyle": "single",
+    "typescript.preferences.quoteStyle": "single",
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "files.autoGuessEncoding": true,
+    "[less]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[js]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[sass]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "files.associations": {
+        "*.ts": "typescript"
+    },
+    "emmet.includeLanguages": {
+        "wxml": "html"
+    },
+    //  #让函数(名)和后面的括号之间加个空格
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+    // eslint
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "vue",
+        "typescript",
+        "html"
     ],
-    // #每次保存的时候将代码按eslint格式进行修复
+    "eslint.probe": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
+        "vue",
+        "markdown",
+        "tsx"
+    ],
+    "eslint.alwaysShowStatus": true, // 总是在 VSCode 显示 ESLint 的状态
+    "eslint.quiet": true, // 忽略 warning 的错误
+    "eslint.logLevel": "error",
+    "css.validate": false,
+    "scss.validate": false,
+    "less.validate": false,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "none"
+        "source.fixAll.eslint": "never",
+        "source.organizeImports": "never"
+    }, // 每次保存的时候自动格式化
+    "files.eol": "\r\n", // 默认行尾字符。
+    "workbench.startupEditor": "none",
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.unicodeHighlight.ambiguousCharacters": false, //单引号包裹字符串
+    "liveServer.settings.donotShowInfoMsg": true,
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "editor.foldingMaximumRegions": 50000,
+    "fileheader.customMade": {
+        // "Author": "git config user.name", // 仅获取用户名
+        // "Date": "Do not edit", // 文件创建时间(不变)
+        // 插件会自动将光标移动到Description选项中 方便输入 Description字段可以在specialOptions更改
+        // "Description": "", // 介绍文件的作用、文件的入参、出参。
+    },
+    // 函数注释
+    "fileheader.cursorMode": {
+        // "author": "git config user.name", // 仅获取用户名
+        "description": "", // 函数注释生成之后，光标移动到这里
+        "param": "", // param 开启函数参数自动提取 需要将光标放在函数行或者函数上方的空白行
+        "return": ""
+    },
+    "fileheader.configObj": {
+        "autoAdd": false, // 自动添加头部注释开启才能自动添加
+        "wideSame": true, // 设置为true开启
+        "wideNum": 13, // 字段长度 默认为13
+        "functionWideNum": 0 // 0 默认关闭 设置一个正整数即可开启 比如12
+    },
+    "editor.guides.bracketPairs": true,
+    "git.enableSmartCommit": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "path-autocomplete.pathMappings": {
+        "@": "${folder}/src",
+        "@a": "${folder}/src/assets",
+        "@c": "${folder}/src/components",
+        "@v": "${folder}/src/views"
+    },
+    "path-intellisense.mappings": {
+        "@": "${workspaceFolder}/src",
+        "@a": "${workspaceFolder}/src/assets",
+        "@c": "${workspaceFolder}/src/components",
+        "@v": "${workspaceFolder}/src/views"
     }
 }
