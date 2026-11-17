@@ -26,15 +26,15 @@ const props = defineProps({
     title: { type: String, default: '' }
 });
 
-/** 抽屉显示状态，通过 v-model:visible 与父组件同步。 */
-const isVisible = defineModel<boolean>('visible', { default: false });
+/** 抽屉显示状态，通过 v-model 与父组件同步。 */
+const isVisible = defineModel<boolean>({ default: false });
 /** 内部 Element Plus 抽屉实例。 */
 const drawerRef = shallowRef<InstanceType<typeof elDrawer>>();
 
 /**
  * 请求关闭抽屉，遵循 Element Plus 的关闭流程。
  * @returns 无返回值。
- * @remarks 无参数；调用内部 handleClose，由其执行 beforeClose；钩子允许关闭后同步 visible 并触发关闭事件。
+ * @remarks 无参数；调用内部 handleClose，由其执行 beforeClose；钩子允许关闭后同步 modelValue 并触发关闭事件。
  */
 function closeDrawer(): void {
     drawerRef.value?.handleClose();

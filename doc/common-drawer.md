@@ -8,16 +8,16 @@
 
 ## 手动验证示例
 
-`src/views/articleAdmin/articleUser/fileList.vue` 提供“打开抽屉验证”入口，可切换长短内容、自定义标题、底部插槽和关闭拦截。正文复用页面现有测试数据，可验证 `elScrollbar` 滚动、底部操作区、`v-model:visible`、关闭方法及事件透传。
+`src/views/articleAdmin/articleUser/fileList.vue` 提供“打开抽屉验证”入口，可切换长短内容、自定义标题、底部插槽和关闭拦截。正文复用页面现有测试数据，可验证 `elScrollbar` 滚动、底部操作区、`v-model`、关闭方法及事件透传。
 
 ## 基本用法
 
-父组件声明布尔状态 `drawerVisible`，通过 Vue 3 的 `v-model:visible` 控制显示；原 Vue 2 的 `:visible.sync` 写法需要替换。
+父组件声明布尔状态 `drawerVisible`，通过 Vue 3 的 `v-model` 控制显示；原 Vue 2 的 `:visible.sync` 写法需要替换。
 
 ```vue
 <commonDrawer
     ref="commonDrawerRef"
-    v-model:visible="drawerVisible"
+    v-model="drawerVisible"
     title="详情"
     size="600px"
     :beforeClose="handleBeforeClose"
@@ -37,12 +37,12 @@
 
 | 属性 | 默认值 | 用途 |
 | --- | --- | --- |
-| `visible` | `false` | 抽屉显示状态，使用 `v-model:visible` 双向绑定。 |
+| `modelValue` | `false` | 抽屉显示状态，使用 `v-model` 双向绑定。 |
 | `title` | `''` | 标题文字；自定义标题插槽覆盖显示内容时仍用于无障碍标题。 |
 
-- `update:visible`：内部 Element Plus 抽屉更新显示状态时同步通知父组件，由 `v-model:visible` 接收。
+- `update:modelValue`：内部 Element Plus 抽屉更新显示状态时同步通知父组件，由 `v-model` 接收。
 - 其他 Element Plus 抽屉属性和监听器通过 `$attrs`、`v-bind` 透传，例如 `size`、`direction`、`appendToBody`、`destroyOnClose`、`beforeClose`、`@open`、`@opened`、`@close`、`@closed`；Vue 3 不再使用 `$listeners`。
-- 对外显示接口为 `v-model:visible`，内部适配 Element Plus 的 `v-model`。
+- 对外显示接口为 `v-model`，内部适配 Element Plus 的 `v-model`。
 
 ## 插槽
 

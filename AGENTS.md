@@ -15,6 +15,7 @@
 | 新增或修改 Vue 样式、SCSS、class 或布局 | [Class 与 SCSS 规范](doc/scss.md)，以及 [Vue 组件规范](doc/vue.md) 中的 Style 标签要求 |
 | 新增或调整列表表格、接入或修改公共表格组件 | [公共表格组件 commonTable](doc/common-table.md)，以及上述适用的 Vue 和样式规范 |
 | 接入或修改公共抽屉组件 | [公共抽屉组件 commonDrawer](doc/common-drawer.md)，以及上述适用的 Vue 和样式规范 |
+| 接入或修改公共弹窗组件 | [公共弹窗组件 commonDialog](doc/common-dialog.md)，以及上述适用的 Vue 和样式规范 |
 
 ## 文档维护
 

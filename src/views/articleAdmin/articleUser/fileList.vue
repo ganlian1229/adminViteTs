@@ -1,4 +1,4 @@
-<!-- 公共表格与抽屉手动测试页 -->
+<!-- 公共表格、抽屉与弹窗手动测试页 -->
 <template>
     <div class="file-list">
         <section class="test-panel">
@@ -40,9 +40,25 @@
             </elForm>
             <div class="tool-actions">
                 <elButton type="primary" @click="handleOpenTestDrawer">打开抽屉验证</elButton>
-                <elTag>visible：{{ drawerVisible }}</elTag>
+                <elTag>modelValue：{{ drawerVisible }}</elTag>
             </div>
             <div class="test-hint">{{ drawerEvent }}</div>
+        </section>
+
+        <section class="test-panel">
+            <div class="panel-title">commonDialog 弹窗验证</div>
+            <elForm class="test-controls" :inline="true" labelPosition="left">
+                <elFormItem label="长内容"><elSwitch v-model="dialogOptions.longContent" /></elFormItem>
+                <elFormItem label="自定义标题"><elSwitch v-model="dialogOptions.customTitle" /></elFormItem>
+                <elFormItem label="显示底部"><elSwitch v-model="dialogOptions.showFooter" /></elFormItem>
+                <elFormItem label="阻止关闭"><elSwitch v-model="dialogOptions.blockClose" /></elFormItem>
+                <elFormItem label="全屏"><elSwitch v-model="dialogOptions.fullscreen" /></elFormItem>
+            </elForm>
+            <div class="tool-actions">
+                <elButton type="primary" @click="handleOpenTestDialog">打开弹窗验证</elButton>
+                <elTag>modelValue：{{ dialogVisible }}</elTag>
+            </div>
+            <div class="test-hint">{{ dialogEvent }}</div>
         </section>
 
         <commonTable
@@ -130,7 +146,7 @@
 
         <commonDrawer
             ref="commonDrawerRef"
-            v-model:visible="drawerVisible"
+            v-model="drawerVisible"
             title="公共抽屉测试"
             size="600px"
             appendToBody
@@ -177,6 +193,56 @@
             </template>
         </commonDrawer>
 
+        <commonDialog
+            ref="commonDialogRef"
+            v-model="dialogVisible"
+            title="公共弹窗测试"
+            width="600px"
+            :fullscreen="dialogOptions.fullscreen"
+            appendToBody
+            :beforeClose="handleBeforeDialogClose"
+            @open="handleDialogEvent('open')"
+            @opened="handleDialogEvent('opened')"
+            @close="handleDialogEvent('close')"
+            @closed="handleDialogEvent('closed')"
+        >
+            <template v-if="dialogOptions.customTitle" #title="{ close, titleId }">
+                <div class="slot-heading">
+                    <span :id="titleId" class="heading-text">title 插槽：自定义弹窗标题</span>
+                    <elButton link type="primary" @click="close">插槽关闭</elButton>
+                </div>
+            </template>
+            <div class="dialog-demo">
+                <div class="demo-controls">
+                    <div class="demo-hint">
+                        滚动下方长内容，检查标题和底部操作区是否保持位置；也可尝试关闭按钮、遮罩和 Esc。
+                    </div>
+                    <div class="guard-control">
+                        <span class="control-label">beforeClose 阻止关闭</span>
+                        <elSwitch v-model="dialogOptions.blockClose" />
+                    </div>
+                    <div class="demo-status">{{ dialogEvent }}</div>
+                    <elButton @click="handleCloseTestDialog">调用 closeDialog()</elButton>
+                </div>
+                <div
+                    v-for="row in dialogOptions.longContent ? tableData : tableData.slice(0, 2)"
+                    :key="row.id"
+                    class="demo-row"
+                >
+                    <div class="row-title">第 {{ row.id }} 条：{{ row.name }}</div>
+                    <div class="row-detail">日期：{{ row.date }}，年龄：{{ row.age }}</div>
+                    <div class="row-detail">{{ row.address }}</div>
+                </div>
+                <div class="end-note">已到达内容底部，可检查最后一条是否完整显示。</div>
+            </div>
+            <template v-if="dialogOptions.showFooter" #footer>
+                <div class="footer-actions">
+                    <span class="footer-hint">footer 插槽：底部操作区</span>
+                    <elButton type="primary" @click="handleCloseTestDialog">关闭弹窗</elButton>
+                </div>
+            </template>
+        </commonDialog>
+
         <section class="event-panel">
             <div class="panel-title">最近一次事件 / 实例检查</div>
             <div class="event-result">{{ lastEvent }}</div>
@@ -201,10 +267,11 @@ import {
 } from 'element-plus';
 import commonTable from '@/componentsGlobal/commonTable.vue';
 import commonDrawer from '@/componentsGlobal/commonDrawer.vue';
+import commonDialog from '@/componentsGlobal/commonDialog.vue';
 
 /** 公共抽屉实例，用于验证公开的关闭方法。 */
 const commonDrawerRef = ref<InstanceType<typeof commonDrawer>>();
-/** 抽屉显示状态，用于验证 v-model:visible 双向同步。 */
+/** 抽屉显示状态，用于验证 v-model 双向同步。 */
 const drawerVisible = ref(false);
 /** 抽屉验证选项。 */
 const drawerOptions = reactive({
@@ -258,6 +325,66 @@ function handleBeforeDrawerClose(done: () => void): void {
  */
 function handleDrawerEvent(event: string): void {
     drawerEvent.value = '抽屉事件：' + event;
+}
+
+/** 公共弹窗实例，用于验证公开的关闭方法。 */
+const commonDialogRef = ref<InstanceType<typeof commonDialog>>();
+/** 弹窗显示状态，用于验证 v-model 双向同步。 */
+const dialogVisible = ref(false);
+/** 弹窗验证选项。 */
+const dialogOptions = reactive({
+    /** 使用全部现有行生成长内容，关闭后仅显示两条。 */
+    longContent: true,
+    /** 是否提供 title 插槽。 */
+    customTitle: true,
+    /** 是否提供 footer 插槽。 */
+    showFooter: true,
+    /** 是否通过 beforeClose 阻止本次关闭。 */
+    blockClose: false,
+    /** 切换 Element Plus 全屏模式。 */
+    fullscreen: false
+});
+/** 最近一次弹窗事件或关闭拦截结果。 */
+const dialogEvent = ref('点击“打开弹窗验证”，检查滚动、插槽及关闭行为。');
+
+/**
+ * 打开测试弹窗。
+ * @returns 无返回值。
+ * @remarks 无参数；将 dialogVisible 设为 true。
+ */
+function handleOpenTestDialog(): void {
+    dialogVisible.value = true;
+}
+/**
+ * 通过公共组件公开方法关闭弹窗。
+ * @returns 无返回值。
+ * @remarks 无参数；调用 closeDialog，触发弹窗的 beforeClose 流程。
+ */
+function handleCloseTestDialog(): void {
+    commonDialogRef.value?.closeDialog();
+}
+/**
+ * 验证关闭钩子可放行或阻止关闭。
+ * @param done Element Plus 提供的关闭回调。
+ * @returns 无返回值。
+ * @remarks 更新测试提示；允许关闭时调用 done，阻止时不调用。
+ */
+function handleBeforeDialogClose(done: () => void): void {
+    if (dialogOptions.blockClose) {
+        dialogEvent.value = 'beforeClose：已阻止关闭，可在弹窗内关闭“阻止关闭”开关后重试。';
+        return;
+    }
+    dialogEvent.value = 'beforeClose：允许关闭';
+    done();
+}
+/**
+ * 显示弹窗透传的生命周期事件。
+ * @param event 当前事件名称。
+ * @returns 无返回值。
+ * @remarks 更新弹窗事件提示。
+ */
+function handleDialogEvent(event: string): void {
+    dialogEvent.value = '弹窗事件：' + event;
 }
 
 /** 测试行字段，直接供表格和插槽读取。 */
@@ -639,7 +766,8 @@ function handleCheckRefs(): void {
         font-weight: bold;
     }
 }
-.drawer-demo {
+.drawer-demo,
+.dialog-demo {
     .demo-controls {
         padding: 16px 0;
         box-sizing: border-box;
