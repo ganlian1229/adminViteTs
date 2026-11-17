@@ -1,6 +1,11 @@
 <template>
     <aside class="sidebar-container" :class="{ 'is-collapsed': isActive }">
-        <router-link class="brand" to="/main/index" aria-label="Admin Vite TS 首页">
+        <router-link
+            class="brand"
+            :class="{ 'is-collapsed': isActive }"
+            to="/main/index"
+            aria-label="Admin Vite TS 首页"
+        >
             <span class="brand-mark">a<span class="brand-dot"></span></span>
             <span v-if="!isActive" class="brand-info"
                 ><strong class="brand-name">Admin Vite TS</strong
@@ -11,8 +16,10 @@
         <el-scrollbar class="nav-scrollbar" wrapClass="scrollbar-wrapper">
             <el-menu
                 class="nav-menu"
+                :class="{ 'is-collapsed': isActive }"
                 :defaultActive="route.path"
                 :collapse="isActive"
+                :collapseTransition="false"
                 :defaultOpeneds="openedsArr"
                 :router="true"
             >
@@ -91,6 +98,11 @@ function filterChildren(children) {
         box-sizing: border-box;
         text-decoration: none;
         color: var(--app-ink);
+        &.is-collapsed {
+            justify-content: center;
+            padding: 0;
+            box-sizing: border-box;
+        }
         .brand-mark {
             position: relative;
             color: var(--app-accent);
@@ -138,6 +150,10 @@ function filterChildren(children) {
             --el-menu-hover-bg-color: #e6ebed;
             border: 0;
             width: 100%;
+            // 收起后菜单项宽 44px，24px 图标两侧各留 10px，与 64px 导航栏中线对齐。
+            &.is-collapsed {
+                --el-menu-base-level-padding: 10px;
+            }
             :deep(.el-menu-item),
             :deep(.el-sub-menu__title) {
                 height: 44px;
